@@ -14,6 +14,7 @@ import top.gxj.rpc.codec.CommonEncoder;
 import top.gxj.rpc.entity.RpcRequest;
 import top.gxj.rpc.entity.RpcResponse;
 import top.gxj.rpc.serializer.JsonSerializer;
+import top.gxj.rpc.serializer.KryoSerializer;
 
 /**
  * @author gxj
@@ -43,7 +44,7 @@ public class NettyClient implements RpcClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new JsonSerializer()))
+                                .addLast(new CommonEncoder(new KryoSerializer()))
                                 .addLast(new NettyClientHandler());
                     }
                 });

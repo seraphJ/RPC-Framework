@@ -34,8 +34,10 @@ public class CommonDecoder extends ReplayingDecoder {
         Class<?> packageClass;
         if (packageCode == PackageType.REQUEST_PACK.getCode()) {
             packageClass = RpcRequest.class;
+            logger.info("RpcRequest包 decode方法执行");
         } else if (packageCode == PackageType.RESPONSE_PACK.getCode()) {
             packageClass = RpcResponse.class;
+            logger.info("RpcResponse decode方法执行");
         } else {
             logger.error("不识别的数据包：{}", packageCode);
             throw new RpcException(RpcError.UNKNOWN_PACKAGE_TYPE);
@@ -50,6 +52,7 @@ public class CommonDecoder extends ReplayingDecoder {
         byte[] bytes = new byte[length];
         in.readBytes(bytes);
         Object obj = serializer.deserialize(bytes, packageClass);
+
         out.add(obj);
     }
 }

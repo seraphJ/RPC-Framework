@@ -1,6 +1,7 @@
 package top.gxj.rpc.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import top.gxj.rpc.enumeration.ResponseCode;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @date 2022/12/20 15:47
  */
 @Data
+@NoArgsConstructor
 public class RpcResponse<T> implements Serializable {
     /**
      * 响应状态码

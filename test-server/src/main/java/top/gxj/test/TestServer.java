@@ -1,11 +1,9 @@
 package top.gxj.test;
 
-import jdk.nashorn.internal.ir.CallNode;
-import lombok.Builder;
 import top.gxj.rpc.api.HelloService;
 import top.gxj.rpc.registry.DefaultServiceRegistry;
 import top.gxj.rpc.registry.ServiceRegistry;
-import top.gxj.rpc.server.RpcServer;
+import top.gxj.rpc.socket.server.SocketServer;
 
 /**
  * @author gxj
@@ -16,7 +14,8 @@ public class TestServer {
         HelloService helloService = new HelloServiceImpl();
         ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
         serviceRegistry.register(helloService);
-        RpcServer rpcServer = new RpcServer(serviceRegistry);
-        rpcServer.start(9000);
+        SocketServer socketServer = new SocketServer(serviceRegistry);
+        socketServer.start(9000);
     }
 }
+

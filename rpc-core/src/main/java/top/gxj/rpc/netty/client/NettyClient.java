@@ -15,6 +15,9 @@ import top.gxj.rpc.entity.RpcRequest;
 import top.gxj.rpc.entity.RpcResponse;
 import top.gxj.rpc.enumeration.RpcError;
 import top.gxj.rpc.exception.RpcException;
+import top.gxj.rpc.loadbalancer.LoadBalancer;
+import top.gxj.rpc.loadbalancer.RandomLoadBalancer;
+import top.gxj.rpc.loadbalancer.RoundRobinLoadBalancer;
 import top.gxj.rpc.registry.NacosServiceRegistry;
 import top.gxj.rpc.registry.ServiceRegistry;
 import top.gxj.rpc.serializer.CommonSerializer;
@@ -35,10 +38,15 @@ public class NettyClient implements RpcClient {
 //    private static final Bootstrap bootstrap;
     private final ServiceRegistry serviceRegistry;
     private CommonSerializer serializer;
-
+    private LoadBalancer loadBalancer = null;
 
     public NettyClient() {
-        this.serviceRegistry = new NacosServiceRegistry();
+        this.serviceRegistry = new NacosServiceRegistry(loadBalancer);
+    }
+
+    public NettyClient(LoadBalancer loadBalancer) {
+        this.loadBalancer = loadBalancer;
+        this.serviceRegistry = new NacosServiceRegistry(loadBalancer);
     }
 
 //    static {

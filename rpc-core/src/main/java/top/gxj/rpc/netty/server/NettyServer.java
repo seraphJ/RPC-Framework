@@ -14,6 +14,7 @@ import top.gxj.rpc.codec.CommonEncoder;
 import top.gxj.rpc.enumeration.RpcError;
 import top.gxj.rpc.exception.RpcException;
 import top.gxj.rpc.hook.ShutdownHook;
+import top.gxj.rpc.loadbalancer.RoundRobinLoadBalancer;
 import top.gxj.rpc.provider.ServiceProvider;
 import top.gxj.rpc.provider.ServiceProviderImpl;
 import top.gxj.rpc.registry.NacosServiceRegistry;
@@ -43,7 +44,7 @@ public class NettyServer implements RpcServer {
     public NettyServer(String host, int port) {
         this.host = host;
         this.port = port;
-        serviceRegistry = new NacosServiceRegistry();
+        serviceRegistry = new NacosServiceRegistry(null);
         serviceProvider = new ServiceProviderImpl();
     }
 

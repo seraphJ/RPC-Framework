@@ -1,6 +1,7 @@
 package top.gxj.rpc.client;
 
 import top.gxj.rpc.entity.RpcRequest;
+import top.gxj.rpc.serializer.CommonSerializer;
 
 /**
  * @author gxj
@@ -8,4 +9,5 @@ import top.gxj.rpc.entity.RpcRequest;
  */
 public interface RpcClient {
     Object sendRequest(RpcRequest rpcRequest);
+    void setSerializer(CommonSerializer serializer);
 }

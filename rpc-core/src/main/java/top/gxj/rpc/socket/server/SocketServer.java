@@ -2,7 +2,8 @@ package top.gxj.rpc.socket.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.gxj.rpc.registry.ServiceRegistry;
+import top.gxj.rpc.provider.ServiceProvider;
+import top.gxj.rpc.serializer.CommonSerializer;
 import top.gxj.rpc.server.RequestHandler;
 import top.gxj.rpc.server.RequestHandlerThread;
 import top.gxj.rpc.server.RpcServer;
@@ -26,10 +27,10 @@ public class SocketServer implements RpcServer {
     private static final int BLOCKING_QUEUE_CAPACITY = 100;
     private final ExecutorService threadPool;
     private RequestHandler requestHandler = new RequestHandler();
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceProvider serviceProvider;
 
-    public SocketServer(ServiceRegistry serviceRegistry) {
-        this.serviceRegistry = serviceRegistry;
+    public SocketServer(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
         BlockingQueue<Runnable> workingQueue = new ArrayBlockingQueue<>(BLOCKING_QUEUE_CAPACITY);
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
         threadPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME,
@@ -43,11 +44,26 @@ public class SocketServer implements RpcServer {
             Socket socket;
             while((socket = serverSocket.accept()) != null) {
                 logger.info("客户端连接：{}:{}", socket.getInetAddress(), socket.getPort());
-                threadPool.execute(new RequestHandlerThread(socket, requestHandler, serviceRegistry));
+                threadPool.execute(new RequestHandlerThread(socket, requestHandler, serviceProvider));
             }
             threadPool.shutdown();
         } catch (IOException e) {
             logger.error("连接时有错误发生：", e);
         }
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void setSerializer(CommonSerializer serializer) {
+
+    }
+
+    @Override
+    public <T> void publishService(Object service, Class<T> serviceClass) {
+
     }
 }

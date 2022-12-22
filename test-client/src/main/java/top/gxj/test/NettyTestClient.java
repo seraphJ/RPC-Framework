@@ -6,6 +6,7 @@ import top.gxj.rpc.client.RpcClient;
 import top.gxj.rpc.client.RpcClientProxy;
 import top.gxj.rpc.entity.RpcRequest;
 import top.gxj.rpc.netty.client.NettyClient;
+import top.gxj.rpc.serializer.KryoSerializer;
 
 /**
  * @author gxj
@@ -13,7 +14,8 @@ import top.gxj.rpc.netty.client.NettyClient;
  */
 public class NettyTestClient {
     public static void main(String[] args) {
-        RpcClient client = new NettyClient("127.0.0.1", 9999);
+        RpcClient client = new NettyClient();
+        client.setSerializer(new KryoSerializer());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
         HelloObject object = new HelloObject(12, "Hello. This is a message.");

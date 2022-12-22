@@ -1,8 +1,8 @@
 package top.gxj.test;
 
 import top.gxj.rpc.api.HelloService;
-import top.gxj.rpc.registry.DefaultServiceRegistry;
-import top.gxj.rpc.registry.ServiceRegistry;
+import top.gxj.rpc.provider.ServiceProviderImpl;
+import top.gxj.rpc.provider.ServiceProvider;
 import top.gxj.rpc.socket.server.SocketServer;
 
 /**
@@ -12,9 +12,9 @@ import top.gxj.rpc.socket.server.SocketServer;
 public class TestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
-        ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
-        serviceRegistry.register(helloService);
-        SocketServer socketServer = new SocketServer(serviceRegistry);
+        ServiceProvider serviceProvider = new ServiceProviderImpl();
+        serviceProvider.addServiceProvider(helloService);
+        SocketServer socketServer = new SocketServer(serviceProvider);
         socketServer.start(9000);
     }
 }

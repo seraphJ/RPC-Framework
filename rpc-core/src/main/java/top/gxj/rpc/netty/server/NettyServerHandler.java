@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gxj.rpc.entity.RpcRequest;
 import top.gxj.rpc.entity.RpcResponse;
-import top.gxj.rpc.registry.DefaultServiceRegistry;
-import top.gxj.rpc.registry.ServiceRegistry;
+import top.gxj.rpc.provider.ServiceProviderImpl;
+import top.gxj.rpc.provider.ServiceProvider;
 import top.gxj.rpc.server.RequestHandler;
 
 /**
@@ -22,11 +22,11 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
     private static final Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
 
     private static RequestHandler requestHandler;
-    private static ServiceRegistry serviceRegistry;
+    private static ServiceProvider serviceProvider;
 
     static {
         requestHandler = new RequestHandler();
-        serviceRegistry = new DefaultServiceRegistry();
+        serviceProvider = new ServiceProviderImpl();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
         try {
             logger.info("服务器接收到请求: {}", msg);
             String interfaceName = msg.getInterfaceName();
-            Object service = serviceRegistry.getService(interfaceName);
+            Object service = serviceProvider.getServiceProvider(interfaceName);
             Object result = requestHandler.handle(msg, service);
             ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result));
             future.addListener(ChannelFutureListener.CLOSE);

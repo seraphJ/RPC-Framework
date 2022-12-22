@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import top.gxj.rpc.client.RpcClient;
 import top.gxj.rpc.entity.RpcRequest;
 import top.gxj.rpc.entity.RpcResponse;
+import top.gxj.rpc.serializer.CommonSerializer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,6 +39,11 @@ public class SocketClient implements RpcClient {
             logger.error("调用时有错误发生：", e);
             return null;
         }
+    }
+
+    @Override
+    public void setSerializer(CommonSerializer serializer) {
+
     }
 }
 

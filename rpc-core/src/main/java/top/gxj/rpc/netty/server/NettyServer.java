@@ -13,6 +13,7 @@ import top.gxj.rpc.codec.CommonDecoder;
 import top.gxj.rpc.codec.CommonEncoder;
 import top.gxj.rpc.enumeration.RpcError;
 import top.gxj.rpc.exception.RpcException;
+import top.gxj.rpc.hook.ShutdownHook;
 import top.gxj.rpc.provider.ServiceProvider;
 import top.gxj.rpc.provider.ServiceProviderImpl;
 import top.gxj.rpc.registry.NacosServiceRegistry;
@@ -68,6 +69,7 @@ public class NettyServer implements RpcServer {
                         }
                     });
             ChannelFuture future = serverBootstrap.bind(port).sync();
+            ShutdownHook.getShutdownHook().addClearAllHook();
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             logger.error("启动服务器时有错误发生：", e);

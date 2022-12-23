@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gxj.rpc.provider.ServiceProvider;
 import top.gxj.rpc.serializer.CommonSerializer;
+import top.gxj.rpc.server.AbstractRpcServer;
 import top.gxj.rpc.server.RequestHandler;
 import top.gxj.rpc.server.RequestHandlerThread;
 import top.gxj.rpc.server.RpcServer;
@@ -17,7 +18,7 @@ import java.util.concurrent.*;
  * @author gxj
  * @date 2022/12/20 16:27
  */
-public class SocketServer implements RpcServer {
+public class SocketServer extends AbstractRpcServer {
 
     private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
 
@@ -62,8 +63,4 @@ public class SocketServer implements RpcServer {
 
     }
 
-    @Override
-    public <T> void publishService(Object service, Class<T> serviceClass) {
-
-    }
 }

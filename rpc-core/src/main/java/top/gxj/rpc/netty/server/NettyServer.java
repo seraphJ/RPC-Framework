@@ -22,6 +22,7 @@ import top.gxj.rpc.registry.ServiceRegistry;
 import top.gxj.rpc.serializer.CommonSerializer;
 import top.gxj.rpc.serializer.JsonSerializer;
 import top.gxj.rpc.serializer.KryoSerializer;
+import top.gxj.rpc.server.AbstractRpcServer;
 import top.gxj.rpc.server.RpcServer;
 
 import java.net.InetSocketAddress;
@@ -30,22 +31,18 @@ import java.net.InetSocketAddress;
  * @author gxj
  * @date 2022/12/21 12:03
  */
-public class NettyServer implements RpcServer {
+public class NettyServer extends AbstractRpcServer {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
 
-    private final String host;
-    private final int port;
-
-    private final ServiceRegistry serviceRegistry;
-    private final ServiceProvider serviceProvider;
-
     private CommonSerializer serializer;
-    public NettyServer(String host, int port) {
+    public NettyServer(String host, int port, Integer serializer) {
         this.host = host;
         this.port = port;
-        serviceRegistry = new NacosServiceRegistry(null);
+        serviceRegistry = new NacosServiceRegistry();
         serviceProvider = new ServiceProviderImpl();
+        this.serializer = CommonSerializer.getByCode(serializer);
+        scanServices();
     }
 
     @Override
@@ -64,7 +61,7 @@ public class NettyServer implements RpcServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new CommonEncoder(new KryoSerializer()));
+                            pipeline.addLast(new CommonEncoder(serializer));
                             pipeline.addLast(new CommonDecoder());
                             pipeline.addLast(new NettyServerHandler());
                         }
@@ -80,16 +77,16 @@ public class NettyServer implements RpcServer {
         }
     }
 
-    @Override
-    public <T> void publishService(Object service, Class<T> serviceClass) {
-        if (serializer == null) {
-            logger.error("未设置序列化器");
-            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
-        }
-        serviceProvider.addServiceProvider(service);
-        serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
-        start();
-    }
+//    @Override
+//    public <T> void publishService(Object service, Class<T> serviceClass) {
+//        if (serializer == null) {
+//            logger.error("未设置序列化器");
+//            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
+//        }
+//        serviceProvider.addServiceProvider(service);
+//        serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
+//        start();
+//    }
 
     @Override
     public void setSerializer(CommonSerializer serializer) {

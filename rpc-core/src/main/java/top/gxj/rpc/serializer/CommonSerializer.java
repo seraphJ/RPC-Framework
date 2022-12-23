@@ -10,7 +10,7 @@ public interface CommonSerializer {
     Object deserialize(byte[] bytes, Class<?> clazz);
     int getCode();
 
-    static CommonSerializer getByCode(int code) {
+    static CommonSerializer getByCode(Integer code) {
         switch (code) {
             case 0:
                 return new KryoSerializer();

@@ -13,7 +13,7 @@ public class TestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
         ServiceProvider serviceProvider = new ServiceProviderImpl();
-        serviceProvider.addServiceProvider(helloService);
+        serviceProvider.addServiceProvider(helloService, "HelloService");
         SocketServer socketServer = new SocketServer(serviceProvider);
         socketServer.start(9000);
     }

@@ -31,22 +31,22 @@ public class CommonDecoder extends ReplayingDecoder {
             throw new RpcException(RpcError.UNKNOWN_PROTOCOL);
         }
         int packageCode = in.readInt();
-        Class<?> packageClass;
-        if (packageCode == PackageType.REQUEST_PACK.getCode()) {
-            packageClass = RpcRequest.class;
-            logger.info("RpcRequest包 decode方法执行");
-        } else if (packageCode == PackageType.RESPONSE_PACK.getCode()) {
-            packageClass = RpcResponse.class;
-            logger.info("RpcResponse decode方法执行");
-        } else {
-            logger.error("不识别的数据包：{}", packageCode);
-            throw new RpcException(RpcError.UNKNOWN_PACKAGE_TYPE);
-        }
         int serializerCode = in.readInt();
         CommonSerializer serializer= CommonSerializer.getByCode(serializerCode);
         if (serializer == null) {
             logger.error("不识别的反序列化器：{}", serializerCode);
             throw new RpcException(RpcError.UNKNOWN_SERIALIZER);
+        }
+        Class<?> packageClass;
+        if (packageCode == PackageType.REQUEST_PACK.getCode()) {
+            packageClass = RpcRequest.class;
+            logger.info("RpcRequest包 decode方法执行 serializer=" + serializer.getClass().getCanonicalName());
+        } else if (packageCode == PackageType.RESPONSE_PACK.getCode()) {
+            packageClass = RpcResponse.class;
+            logger.info("RpcResponse decode方法执行 serializer=" + serializer.getClass().getCanonicalName());
+        } else {
+            logger.error("不识别的数据包：{}", packageCode);
+            throw new RpcException(RpcError.UNKNOWN_PACKAGE_TYPE);
         }
         int length = in.readInt();
         byte[] bytes = new byte[length];

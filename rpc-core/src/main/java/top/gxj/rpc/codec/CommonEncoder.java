@@ -30,10 +30,10 @@ public class CommonEncoder extends MessageToByteEncoder {
         out.writeInt(MAGIC_NUMBER);
         if (msg instanceof RpcRequest) {
             out.writeInt(PackageType.REQUEST_PACK.getCode());
-            logger.info("RpcRequest包 encode方法执行");
+            logger.info("RpcRequest包 encode方法执行 serializer=" + serializer.getClass().getCanonicalName());
         } else {
             out.writeInt(PackageType.RESPONSE_PACK.getCode());
-            logger.info("RpcResponse包 encode方法执行");
+            logger.info("RpcResponse包 encode方法执行 serializer=" + serializer.getClass().getCanonicalName());
         }
         out.writeInt(serializer.getCode());
         byte[] bytes = serializer.serialize(msg);
